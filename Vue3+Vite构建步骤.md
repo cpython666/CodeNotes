@@ -60,8 +60,6 @@ createApp(App).component('e-charts',ECharts).mount('#app')
 
 ## 项目结构及文件夹作用
 
-![image-20221210200135258](D:/a%E6%96%87%E6%A1%A3%E8%B5%84%E6%96%99/markdown_dir/%E7%AC%94%E8%AE%B0/Vue3+Vite%E6%9E%84%E5%BB%BA%E6%AD%A5%E9%AA%A4.assets/image-20221210200135258.png)
-
 `node_modules`:存放安装的依赖包
 
 `public和assets`：均可用来存放图片，视频等静态资源
