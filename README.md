@@ -15,9 +15,13 @@
 
 [jquery笔记](jquery笔记.md)
 
+[Canvas](./Canvas.md)
+
 ## Python
 
-[Python笔记](Python笔记.md)
+[Python笔记](./Python笔记.md)
+
+[Selenium](./Selenium.md)
 
 ## Java
 
