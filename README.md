@@ -23,6 +23,8 @@
 
 [Selenium](./Selenium.md)
 
+[Python操作Redis](./Python操作Redis.md)
+
 ## Java
 
 [Java笔记](Java笔记.md)

@@ -54,6 +54,18 @@ json.load()	读取文件中json形式的字符串元素转化为Python类型
 注意：不带s的是序列化到文件或者从文件反序列化，带s的都是内存操作不涉及持久化。
 ```
 
+```
+with open('article.json','w') as f:
+    json.dump(articles,f)
+```
+
+```
+with open('article.json','r') as f:
+    articles=json.load(f)
+```
+
+
+
 ### re
 
 ```
@@ -182,6 +194,29 @@ text=requests.get(url).content
 with open(f'./douban/{url.split("/")[-1]}', 'wb') as f:
     f.write(text)
 ```
+
+### chardet
+
+练习爬虫的许多小伙伴，在爬取网页时，肯定遇到过页面乱码的情况，其实是网页编码没有成功配对。
+
+虽然在HTML页面中有charset标签，可以查看，或者一种一种编码地试，大概率也能不难地实现。那如果有第三方库，帮助我们检测网页编码，岂不美哉！于是就有了这篇文章“主角”的登场：chardet
+
+> chardet.detect() : 函数接受一个参数，一个非unicode字符串。它返回一个字典，其中包含自动检测到的字符编码和从0到1的可信度级别。
+>
+> 
+>
+> 返回的内容有三个：
+> encoding：表示字符编码方式。
+> confidence：表示可信度，也可以理解为检测的概率。
+> language：语言。
+>
+> 
+>
+> 这里检测的结果返回的是字典，而我们需要的是encoding的内容，即
+>
+> chardet.detect()['encoding']
+
+
 
 
 
