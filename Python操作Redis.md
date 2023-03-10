@@ -43,7 +43,7 @@ print(key)
 
 **连接池**
 
-redis-py 使用 connection pool 来管理对一个 redis server 的所有连接，避免每次建立、释放连接的开销。
+redis 使用 connection pool 来管理对一个 redis server 的所有连接，避免每次建立、释放连接的开销。
 
 默认，每个`Redis`实例都会维护一个自己的连接池。可以直接建立一个连接池，然后作为参数 `Redis`，这样就可以实现多个 `Redis `实例共享一个连接池。
 
@@ -1109,6 +1109,18 @@ v1
 ['v1', 'v2']
 '''
 ```
+
+> > 此方法被弃用
+>
+> Redis Hmset 命令用于同时将多个 field-value (字段-值)对设置到[哈希表](https://so.csdn.net/so/search?q=哈希表&spm=1001.2101.3001.7020)中。
+>
+> 此命令会覆盖哈希表中已存在的字段。
+>
+> 如果哈希表不存在，会创建一个空哈希表，并执行 HMSET 操作。
+
+
+
+
 
 ### 取出所有键值对
 
