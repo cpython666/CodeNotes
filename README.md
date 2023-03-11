@@ -25,7 +25,9 @@
 
 [Python操作Redis](./Python操作Redis.md)
 
-[Python多线程的原理与实现](./Python多线程的原理与实现.md)
+[threading多进程](./threading多进程.md)
+
+[multiprocessing多进程](./multiprocessing多进程.md)
 
 ## Java
 

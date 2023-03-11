@@ -1,4 +1,13 @@
-# Python`多线程`原理与实战
+# Python`多线程`原理与实战-threading
+
+## 常用
+
+- run（）：用以表示线程活动的方法
+- start（）：启动线程
+- join（）：等待至线程终止
+- isAlive（）：返回线程是否活动的
+- getName（）：返回线程名称
+- setName() : 设置线程名称
 
 ## 目的：
 
@@ -413,7 +422,6 @@ class WorkManager(object):
       for i in range(thread_num):
          # 创建工作线程(线程池中的对象)
          self.threads.append(Work(self.work_queue))
-
 
    """
       初始化工作队列
