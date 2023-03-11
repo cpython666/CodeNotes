@@ -392,7 +392,22 @@ driver_path=check_update_chromedriver('./')
 
 
 
-### xpath
+### lxml
+
+> etree主要函数：
+>
+> - etree.HTML()：解析字符串格式的HTML文档对象，将字符串参数变为Element对象，以便使用xpath()等方法；
+>
+> - etree.tostring()：将Element对象转换成字符串；
+>
+> - > ```python
+>   > 只转换文本
+>   > text = etree.tounicode(text, method="text")
+>   > #html标签也转换
+>   > text = etree.tounicode(text)
+>   > ```
+>
+> - etree.fromstring()：将字符串转换成Element对象。
 
 标签属性值
 
