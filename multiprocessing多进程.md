@@ -599,3 +599,5 @@ if __name__ == '__main__':
 ## 结语
 
 多进程 multiprocessing 相比多线程功能强大太多，而且使用范围更广，希望本文对大家有帮助！
+
+## 该文章源于[Python 爬虫进阶六之多进程的用法](https://cuiqingcai.com/3335.html)
