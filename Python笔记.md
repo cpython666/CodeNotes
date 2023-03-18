@@ -109,6 +109,18 @@ data.fina(0)
 data.isnull().any()
 ```
 
+#### 删除某一列
+
+```python
+#1.
+del df['column-name']
+
+#采用drop方法，有下面三种等价的表达式：
+df,drop('num',axix=1),不改变内存，及输入df的时候，它还是显示原数据
+df.drop('num',axix=1，inplace=True),改变内存，及输入df的时候，它显示改变后的数据
+df.drop([df.columns[[0,1]]],axis=1,inpalce=True)
+```
+
 
 
 ```python
@@ -156,6 +168,18 @@ students.sort_values('总分',inplace=True,ascending=False)
 inplace为False时，不改变原df，
 a's'c
 ```
+
+#### reset_index()
+
+```
+df.index = range(len(df))  # 重置索引
+```
+
+| **drop**    | **布尔值，如果为False，则将替换的索引列添加到数据中。**   |
+| ----------- | --------------------------------------------------------- |
+| **inplace** | **布尔值，如果为True，则对原始 DataFrame 本身进行更改。** |
+
+
 
 ### matplotlib
 

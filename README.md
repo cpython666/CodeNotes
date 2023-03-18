@@ -17,6 +17,8 @@
 
 [Canvas](./Canvas.md)
 
+[Canvas百战成神-圆](Canvas百战成神-圆.md)
+
 ## Python
 
 [Python笔记](./Python笔记.md)
