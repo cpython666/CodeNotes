@@ -1,10 +1,49 @@
 # Python笔记
 
+> 下载python库一直失败，报hostname出错的问题
+>
+> 可能是因为你电脑开了代理
+
+## 基础
+
+### 字典
+
+```python
+#创建空字典
+dic1={}
+
+dic2=dic()
+
+#添加值
+dic1[1]=1
+dic1[2]=2
+
+#清除值
+del dic1[1]
+dic1.clear()
+
+#查询值
+value=dict1["2"]
+
+#有则返回值，无则插入默认值
+dic1.setdefault(1,111)
+#有则返回值，无则返回默认值
+dic1.get(1,222)
+
+dict1.keys()
+dict1.values()
+dict1.items
+
+#下标索引
+for i in enumerate(dict1):
+    print(i)
+```
+
+
+
+
+
 ## 常用库
-
-
-
-
 
 ### os
 
@@ -858,4 +897,6 @@ https://api.bilibili.com/x/web-interface/view?aid=46101743
 3.用bvid和cid获取aid: https://api.bilibili.com/x/web-interface/view?cid=(cid)&bvid=(bvid,要带上开头的BV!) 在json的["data"]["aid"]里 
 这应该是全网第一个破解了bilibili的BV号api的文章把(好像有点水啊) 
 ```
+
+
 

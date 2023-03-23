@@ -633,9 +633,44 @@ JSON.parse()
 
 ## 注意
 
-$(‘#’)获取0或1个元素
+> $(‘#’)获取0或1个元素
+>
+> $(‘.’)可获取多个元素
 
-$(‘.’)可获取多个元素
+> 动态添加节点时间绑定
+>
+> 
+>
+> body是静态节点，.danmu是动态节点
+>
+> 
+>
+>  $('body').on('mouseout','.danmu',function(e) {
+>
+>   $(this).css("animation-play-state","running")
+>
+>   $(this).children().addClass('hide')
+>
+>  })
+
+
+
+> mouseover mouseout 包括子元素
+>
+> mouseenter moseleave 不含子元素
+
+
+
+> <script src="./jquery.min.js"></script>
+>     <script>
+>     $.get("http://ipinfo.io", function(response) {
+>         console.log(response.ip);
+>         console.log(response.country);
+>         console.log(response.region);
+>         console.log(response.city);
+>         $('.ip').text(response.country+'-'+response.region+'-'+response.city+'-'+response.ip)
+> }, "jsonp");
+> </script>
 
 
 
