@@ -103,6 +103,20 @@ with open('article.json','r') as f:
     articles=json.load(f)
 ```
 
+### pipreqs
+
+在当前目录使用生成
+
+```python
+pipreqs ./ --encoding=utf8 --force
+```
+
+> `--encoding=utf8` ：为使用utf8编码
+>
+> `--force` ：强制执行，当 生成目录下的requirements.txt存在时覆盖 
+>
+> **.** /: 在哪个文件生成requirements.txt 文件
+
 
 
 ### re
@@ -257,6 +271,11 @@ text=requests.get(url).content
 with open(f'./douban/{url.split("/")[-1]}', 'wb') as f:
     f.write(text)
 ```
+
+> 将 字 典 中 的 " h t t p s " 和 " h t t p " 全 部 大 写 了 ， 尝 试 之 后 确 实 可 行 了 
+>
+> - 注意字典proxy中，对于每个value无论key是HTTP还是HTTPS，都用HTTP开头！只有key用HTTPS！
+> - 如果requests想要爬取的网站是https:// ，那么一定一定需要在requests里加上verify = False这句话
 
 ### chardet
 
@@ -839,6 +858,9 @@ ab+ 以二进制格式打开一个文件用于追加。如果该文件已存在�
 
 ```python
 len2=[10000000 if i==0.0 else i for i in len1]
+
+# 只保留汉字
+seg_list = filter(lambda x: '\u4e00' <= x <= '\u9fa5', seg_list)
 
 detail_list['虫子编号']=detail_list['虫子编号'].apply(lambda row:156 if row==11 else row)
 detail_list=pd.read_csv('result2.csv',usecols=[0,1,2])
