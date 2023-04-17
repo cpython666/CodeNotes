@@ -5,6 +5,8 @@
 
 [算法详解](算法详解.md)
 
+[蓝桥杯万字攻略：算法模板大放送！-c++](./蓝桥杯万字攻略：算法模板大放送！-c++.md)
+
 ## 前端
 
 [2022前端面试题](./2022前端面试题.md)
@@ -26,6 +28,8 @@
 [Selenium](./Selenium.md)
 
 [Python操作Redis](./Python操作Redis.md)
+
+[Python操作MongoDB](./Python操作MongoDB.md)
 
 [threading多进程](./threading多进程.md)
 

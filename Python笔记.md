@@ -6,6 +6,51 @@
 
 ## 基础
 
+### 词频统计
+
+```python
+# 招聘日期
+times=[]
+word_dict = {}
+for word in times:
+    word=datetime.datetime.fromtimestamp(int(word)).strftime("%Y-%m-%d")
+    if word not in word_dict:
+        word_dict[word] = 1
+    else:
+        word_dict[word] += 1
+sorted_word_dict = sorted(word_dict.items(), key=lambda x: x[0], reverse=False)
+```
+
+词频统计并显示词云图
+
+```python
+import jieba
+from collections import Counter
+
+words = jieba.cut(text) # 进行分词
+stopwords=['一个','不是','这个','就是','什么','没有','为了','一下','一种','一股']
+words=[i for i in words if i and len(i)>1 and i not in stopwords]
+word_count = Counter(words) # 统计词频
+
+print(word_count)
+ls=word_count.most_common()
+ls = filter(lambda x: '\u4e00' <= x[0] <= '\u9fa5', ls)
+from pyecharts import options as opts
+from pyecharts.charts import WordCloud
+from pyecharts.globals import SymbolType
+
+
+words = ls
+c = (
+    WordCloud()
+    .add("", words, word_size_range=[20, 100], shape=SymbolType.DIAMOND)
+    .set_global_opts(title_opts=opts.TitleOpts(title="5.评论词云分析-知乎"))
+    .render("5.评论词云分析-知乎.html")
+)
+```
+
+
+
 ### 字典
 
 ```python
@@ -60,6 +105,8 @@ os.makedirs(path) 多层创建目录
 os.mkdir(path) 创建目录
 ```
 
+
+
 ### sys
 
 
@@ -77,8 +124,6 @@ print(sys.executable)
 import os
 os.system('node script.js')
 ```
-
-
 
 ### json
 
@@ -103,6 +148,143 @@ with open('article.json','r') as f:
     articles=json.load(f)
 ```
 
+### pyecharts
+
+标题居中
+
+```python
+from pyecharts.charts import Line
+from pyecharts import options as opts
+
+# 创建一个 Line 实例
+line_chart = Line()
+
+# 设置图表标题并设置标题位置为居中
+line_chart.set_global_opts(title_opts=opts.TitleOpts(title="图表标题", pos_left="center"))
+
+# 添加数据
+line_chart.add_xaxis(["a", "b", "c", "d", "e"])
+line_chart.add_yaxis("系列1", [1, 3, 5, 7, 9])
+line_chart.add_yaxis("系列2", [2, 4, 6, 8, 10])
+
+# 渲染图表到 HTML 文件
+line_chart.render("line_chart.html")
+```
+
+子标题居中
+
+```python
+bar = Bar()
+bar.add_xaxis(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
+bar.add_yaxis('Category A', [820, 932, 901, 934, 1290, 1330, 1320])
+bar.add_yaxis('Category B', [320, 332, 401, 334, 390, 330, 320])
+bar.set_global_opts(
+    title_opts=opts.TitleOpts(title="Bar Chart", 
+                              subtitle="Example Subtitle",
+                              title_textstyle_opts=opts.TextStyleOpts(font_size=24),
+                              pos_left='center', 
+                              subtext_style=opts.TextStyleOpts(font_size=18, text_align="center")),
+)
+```
+
+图例显示在右方
+
+要将饼形图的图例显示在右方，可以使用 Pyecharts 的 `set_global_opts()` 方法来设置全局参数 `legend_opts`。其中，`legend_opts` 是一个字典类型，用于设置图例相关的属性。可以通过指定 `orient` 参数的值来设置图例的排列方向。将 `orient` 设置为 ‘vertical’，可以让图例显示在右方。
+
+下面是将图例显示在右方的代码示例：
+
+```python
+from pyecharts.charts import Pie
+from pyecharts import options as opts
+
+# 原始数据
+raw_data = [('3', 465), ('经验不限', 464), ('1', 348), ('5', 168), ('1-3年', 55), ('3-5年', 52), ('5-7年', 6), ('10', 6), ('7年以上', 3), ('5-10年', 1)]
+
+# 计算每个元素出现的频率
+total = sum([count for _, count in raw_data])
+data = [(name, count/total) for name, count in raw_data]
+
+# 创建图表实例并添加数据
+pie = (Pie()
+       .add("", data)
+       .set_series_opts(label_opts=opts.LabelOpts(formatter="{b}: {d:.2%}"))
+       .set_global_opts(title_opts=opts.TitleOpts(title="数据占比"),
+                        legend_opts=opts.LegendOpts(type_="scroll", orient="vertical", pos_right="5%", pos_top="20%"))
+       )
+
+# 渲染图表到 HTML 文件
+pie.render("pie_chart.html")
+```
+
+
+
+在上述代码中，我们在 `set_global_opts()` 中使用了 `legend_opts` 来设置图例的相关属性。其中，`type_` 参数设置为 “scroll”，表示当图例过多时，图例可以通过滚动来浏览；`orient` 参数设置为 “vertical”，使图例竖直排列；`pos_right` 参数设置为 “5%”，将图例的位置设置到饼图右边，距离饼图页面右边界的距离为 5%；`pos_top` 参数设置为 “20%”，表示图例距离饼图页面顶部的距离为 20%。可以根据实际需求适当调整这些参数。
+
+运行上述代码后，将生成一个带有竖直图例的饼图 HTML 文件，图例显示在了饼图的右侧。
+
+
+
+输出为图片
+
+```python
+from pyecharts.charts import Line
+from pyecharts import options as opts
+from selenium import webdriver
+
+# 创建一个 Line 实例
+line_chart = Line()
+
+# 添加数据
+line_chart.add_xaxis(["a", "b", "c", "d", "e"])
+line_chart.add_yaxis("系列1", [1, 3, 5, 7, 9])
+line_chart.add_yaxis("系列2", [2, 4, 6, 8, 10])
+
+# 设置图表标题并设置标题位置为居中
+line_chart.set_global_opts(title_opts=opts.TitleOpts(title="图表标题", pos_left="center"))
+
+# 渲染图表到 HTML 文件
+line_chart.render("line_chart.html")
+
+# 使用 selenium 打开 HTML 文件并截图为 PNG 图片
+options = webdriver.ChromeOptions()
+options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-gpu")
+options.add_argument("--headless")
+driver = webdriver.Chrome(options=options)
+driver.get("file:///path/to/line_chart.html")
+driver.save_screenshot("line_chart.png")
+driver.quit()
+```
+
+最高薪资最低薪资箱线图
+
+```python
+# 最低薪资和最高薪资数据
+data = [minimumWage_list,maximumWage_list]
+
+# 创建一个 Boxplot 实例
+boxplot = Boxplot()
+
+# 添加数据
+boxplot.add_xaxis(["最低薪资", "最高薪资"])
+boxplot.add_yaxis("", boxplot.prepare_data(data))
+
+# 设置图表标题
+boxplot.set_global_opts(title_opts={"text": "最低薪资与最高薪资分布箱线图"})
+
+# 渲染图表到 HTML 文件
+boxplot.render("招聘信息-月薪箱线图.html")
+```
+
+
+
+
+
+
+
+
+
 ### pipreqs
 
 在当前目录使用生成
@@ -120,6 +302,14 @@ pipreqs ./ --encoding=utf8 --force
 
 
 ### re
+
+匹配数字
+
+```python
+re.findall('(\d+)','5-10年')
+```
+
+
 
 ```
 import re
@@ -161,6 +351,19 @@ data.fina(0)
 查看是否有空值
 data.isnull().any()
 ```
+
+#### 替换表头
+
+```python
+df = pd.read_csv('train.csv', names=['乘客ID','是否幸存','仓位等级','姓名','性别','年龄','兄弟姐妹个数','父母子女个数','船票信息','票价','客舱','登船港口'],index_col='乘客ID',header=0)
+df.head()
+```
+
+
+
+
+
+
 
 #### 删除某一列
 
@@ -261,6 +464,29 @@ ax=plt.gca()
 ax.xaxis.set_major_locator(x_spliter)
 ```
 
+### collections
+
+`collections` 是 Python 标准库中一个非常实用的模块，提供了许多集合数据类型的实现，包括 OrderedDict、defaultdict、Counter 等，也有一些辅助函数。
+
+以下是 `collections` 中一些常用的数据类型和函数：
+
+1. `defaultdict`：一个字典类型，用于创建默认值为指定类型的字典。当使用一个不存在的键时，会返回该类型的默认值，而不是引发 KeyError 异常。
+2. `OrderedDict`：从 Python 3.7 起，在普通字典中也保留了插入顺序，但之前的版本可以通过使用 `OrderedDict` 来创建有序字典。
+3. `Counter`：计数器，用于统计可哈希对象中每个元素出现的次数。返回一个字典类型，键为原始元素，值为元素出现的次数。
+4. `deque`：双端队列，实现了在两端快速地插入和删除操作，比列表的插入和删除操作效率更高。
+5. `namedtuple`：具有命名字段的元组，可以使用字段名来访问元组的元素，比使用索引访问更方便，也更易读。
+6. `ChainMap`：将多个字典或映射（例如命名元组）合并成单个映射。 查找时会先从第一个映射中查找，如果没找到再到第二个映射中查找？，以此类推。
+
+函数：
+
+1. `Counter.elements()` 返回计数器中的所有元素，以列表形式返回。
+2. `Counter.most_common([n])` 返回计数器中出现频率最高的 n 个元素和它们出现的次数。
+3. `deque.rotate(n)` 将 deque 中所有元素向右移动 n 个位置。当 n 为正数时，队列最右边的 n 个元素会被移到队列最左边；当 n 为负数时，队列最左边的 n 个元素会被移到队列最右边。
+
+除了上述常用的数据类型和函数之外，`collections` 中还有一些其他实用的数据类型和函数，可以参考 Python 官方文档中的 `collections` 模块部分。
+
+
+
 ### requests
 
 ```python
@@ -327,6 +553,41 @@ print(ctx.call("add", 1, 2))
 
 ### selenium
 
+快速开始
+
+```python
+import requests
+import random
+from lxml import etree
+import string
+from time import sleep
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.keys import Keys
+
+page_list=[]
+# keywords=['chatgpt']
+keywords=['chatgpt','人工智能']
+base_url='https://www.baidu.com/'
+
+service=Service('../chromedriver.exe')
+
+bro=webdriver.Chrome(service=service)
+# url_f=open('result_url.csv','a',encoding='utf-8')
+f=open('result.csv','a',encoding='utf-8')
+
+for keyword in keywords:
+    urls = []
+    bro.get(base_url)
+    sleep(0.5)
+    input=bro.find_element(By.XPATH,'//*[@id="kw"]')
+    input.send_keys(keyword)
+    input.send_keys(Keys.ENTER)
+```
+
+
+
 
 
 ```python
@@ -389,7 +650,7 @@ from selenium.webdriver import DesiredCapabilities
 
 
 
-自动检查安装更新webdriver代码
+#### 自动检查安装更新webdriver代码
 
 ```python
 import os
@@ -507,7 +768,7 @@ a/@href
 
 #### 添加自定义词
 
-```
+```python
 import jieba
 jieba.add_word("自定义词1")
 jieba.add_word("自定义词2")
@@ -858,6 +1119,8 @@ ab+ 以二进制格式打开一个文件用于追加。如果该文件已存在�
 
 ```python
 len2=[10000000 if i==0.0 else i for i in len1]
+
+exp_list=[i if i !='不限' and i!=0 else '经验不限' for i in exp_list]
 
 # 只保留汉字
 seg_list = filter(lambda x: '\u4e00' <= x <= '\u9fa5', seg_list)
