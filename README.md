@@ -29,6 +29,8 @@
 
 [Python操作Redis](./Python操作Redis.md)
 
+[简单易用，灵活强大：用SQLAlchemy实现Python操作数据库](./简单易用，灵活强大：用SQLAlchemy实现Python操作数据库.md)
+
 [Python操作MongoDB](./Python操作MongoDB.md)
 
 [threading多进程](./threading多进程.md)
