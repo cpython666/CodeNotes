@@ -1,9 +1,24 @@
 # Vue3+Vite构建步骤
 
+Node的npm安装什么包都卡住，然后报错，日志文件说是代理的问题，此时，需要设置代理为空
+
+```js
+//proxy为js中代理
+npm config get proxy
+npm config get https-proxy
+```
+
+```js
+npm config set proxy null
+npm config set https-proxy null
+```
+
+
+
 ## 用`vite`初始化vue项目(回车)
 
 ```js
-npm create vite@latest vueVitePro -- --template vue
+npm create vite@latest vueVitePro --template vue
 ```
 
 ## 安装配置路由vue-router
@@ -32,7 +47,7 @@ components:{  Setting  }
 ## 安装axios并挂载在vue原型上
 
 ```js
-import axios from 'axios'n'p
+import axios from 'axios'
 app.config.globalProperties.$http= axios
 ```
 
@@ -811,6 +826,36 @@ export default {
     }
 };
 </script>
+```
+
+## 文件大小超出打包限制
+
+```js
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [vue()],
+  build: {
+    chunkSizeWarningLimit: 1500,
+    rollupOptions: {
+      output: {
+        // 分包
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            return id
+              .toString()
+              .split("node_modules/")[1]
+              .split("/")[0]
+              .toString();
+          }
+        },
+      },
+    },
+  }
+})
 ```
 
 

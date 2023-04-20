@@ -558,5 +558,36 @@ iendswith –字符串字段由这个值结尾（大小写敏感）
 match – 使你可以使用一整个document与数组进行匹配查询list
 ```
 
+## 新建一个用户表
+
+```python
+from mongoengine import connect,Document,IntField,StringField,DateTimeField,UUIDField,EmailField
+import uuid
+import datetime
+
+# connect(db='user', host='localhost', port=27017)
+connect(db='Bt', username='Bent', password='9', host='309', port=27017, authSource='Bint')
+
+class User(Document):
+    username = StringField(required=True,unique=True)
+    password = StringField(required=True)
+    email = EmailField(sparse=True,unique=True)
+    name = StringField(default='Unknown')
+    birthday = DateTimeField()
+    gender = StringField(choices=('Male', 'Female', 'Unknown'),default='Unknown')
+    phone_number = StringField(default='Unknown')
+    address = StringField(default='Unknown')
+    nationality = StringField(default='China')
+    registered_time = DateTimeField(default=datetime.datetime.now())
+    last_login_time = DateTimeField(default=datetime.datetime.now())
+    avatar = StringField(default='https://img2.baidu.com/it/u=3618236253,1028428296&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500')
+    account_status = StringField(choices=('Enabled', 'Disabled'),default='Enabled')
+    account_type = StringField(choices=('Normal', 'Admin'),default='Normal')
+
+# 创建一个用户对象并保存到MongoDB
+user = User(username='Alic11111zaea', password='password123')
+user.save()
+```
+
 
 

@@ -317,6 +317,35 @@ ret = re.findall(r"\d+", "python = 9999, c = 7890, c++ = 12345")
 print(ret)
 ```
 
+### pymongo
+
+```python
+import pymongo
+# 连接 MongoDB
+client = pymongo.MongoClient('39.101.74', 27017, username='BigDatent', password='9', authSource='Bigntent')
+# 获取数据库
+db = client['BigData-Mountent']
+# 获取集合实例
+collection = db["mountain"]
+
+l=[]
+
+import json
+with open('result.json','r',encoding='utf-8') as f:
+    a=json.loads(f.read())
+
+for i in a:
+    l.append(i)
+
+# res = collection.insert_one(doc)
+res = collection.insert_many(l)
+print(res.inserted_ids)
+```
+
+
+
+
+
 ### pandas
 
 数据转DataFrame
