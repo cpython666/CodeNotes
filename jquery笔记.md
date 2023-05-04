@@ -661,6 +661,8 @@ JSON.parse()
 
 
 
+## 获取当前地址信息
+
 > <script src="./jquery.min.js"></script>
 >     <script>
 >     $.get("http://ipinfo.io", function(response) {
