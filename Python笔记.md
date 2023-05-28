@@ -4,6 +4,12 @@
 >
 > 可能是因为你电脑开了代理
 
+
+
+> 函数默认参数为对象时，只会加载一次
+>
+> selenium对象池获取对象时，只调用一次获取对象方法
+
 ## 基础
 
 ### 词频统计
@@ -303,7 +309,7 @@ pipreqs ./ --encoding=utf8 --force
 
 ### re
 
-匹配数字
+#### 匹配数字
 
 ```python
 re.findall('(\d+)','5-10年')
@@ -311,11 +317,187 @@ re.findall('(\d+)','5-10年')
 
 
 
-```
+```python
 import re
 ret = re.findall(r"\d+", "python = 9999, c = 7890, c++ = 12345")
 print(ret)
 ```
+
+#### 判断字符串是否含英文
+
+```python
+import re
+def containEnglist(str_):
+    '''判断字符串中是否含有英文'''
+    return bool(re.search('[a-z]',str_))
+containEnglist('弄完崇拜我北侧二百完成a')
+```
+
+#### 网页代码处理
+
+```python
+def clean_html(html: str) -> str:
+    """清除html文本的html标记."""
+    # 1.去除js，css，html描述，html标签
+    cleaned_html = re.sub(
+        r"(?is)<(script|style).*?>.*?(</\1>)|<!--(.*?)-->[\n]?|<(?s).*?>", "", html.strip()
+    )
+
+    # 2.处理空格和HTML实体zi'fu
+    cleaned_html = re.sub(
+        r"&nbsp;|  |\t|&.*?;[0-9]*&.*?;|&.*?;", "", cleaned_html
+    )
+
+    # 3.文本规范化
+    # cleaned_html = ucd.normalize('NFKC', cleaned_html).replace(' ', '')
+
+    return cleaned_html.strip()
+```
+
+
+
+1. ）这段代码使用了 Python 的 re 模块，对给定的 HTML 文本进行了正则表达式匹配和替换。
+
+具体来说，该代码实现了以下正则表达式操作：
+
+1. 针对脚本和样式标签以及其内容的匹配：
+
+```python
+(?is)<(script|style).*?>.*?(</\1>)
+```
+
+
+
+这个正则表达式匹配一个 `<script>` 或 `<style>` 标签，后面跟着零个或多个任意字符，然后匹配该标签的结束标记 `</script>` 或 `</style>`。其中 `(?is)` 是 re 模块对正则表达式的选项设置，`s` 表示在匹配时忽略换行符，`i` 表示不区分大小写。`\1` 是反向引用，它引用了前面的捕获组 `(script|style)` 中匹配的文本。
+
+1. 对注释内容的匹配：
+
+```python
+<!--(.*?)-->[\n]?
+```
+
+
+
+这个正则表达式匹配 HTML 中的注释内容，其中 `(.*?)` 是一个非贪婪模式，表示匹配任何字符（点号）零个或多个，直到遇到闭合标记 `-->`。 `[\n]?` 匹配可选的换行符（如果有的话）。
+
+1. 对标签的匹配：
+
+```python
+<(?s).*?>
+```
+
+
+
+这个正则表达式匹配所有的 HTML 标签，包括嵌套标签、不带属性的标签，以及其它密集的标签格式。`(?s)` 表示在匹配时不区分换行符和空格。
+
+完整的代码：
+
+```python
+import re
+
+html = '<p>Some text <script>alert("Hello");</script> surrounded by<br> whitespace   \t</p><!-- This is a comment -->'
+cleaned_html = re.sub(r"(?is)<(script|style).*?>.*?(</\1>)|<!--(.*?)-->[\n]?|<(?s).*?>", "", html.strip())
+
+print(cleaned_html) #输出：“Some text surrounded by whitespace”
+```
+
+
+
+在上面的示例中，我们将 HTML 文本传入 `re.sub()` 函数中，并使用正则表达式进行匹配和替换，最终删除了 HTML 文本中的脚本、样式、注释等元素，只留下纯文本。
+
+2.）这段代码使用了正则表达式对 `cleaned_html` 中的字符串进行匹配替换。具体来说，该正则表达式匹配以下字符或字符串：
+
+1. ` ` : 匹配 HTML 中的非断行空格。
+2. ``: 匹配一个空格字符。
+3. `\t` : 匹配一个 tab 字符。
+4. `&.*?;[0-9]*&.*?;` : 匹配 HTML 中的特殊字符实体，包括它们的实体格式（`&...;`）。例如：` `, `©`。
+5. `&.*?;` : 匹配 HTML 中的其他特殊字符实体。
+
+`re.sub()` 方法的第一个参数是正则表达式，第二个参数是要替换匹配部分的新文本，第三个参数是被搜索和替换的原始文本。
+
+这段代码的作用是将文本中的特殊字符和空格替换为一个空字符串，从而去除所有的空格和特殊字符，只剩下文本内容。替换后的文本将被返回。
+
+以下是一个示例：
+
+```python
+import re
+
+cleaned_html = "This is a    sample &nbsp; text.&copy; &lt;html&gt;"
+cleaned_text = re.sub(r"&nbsp;|  |\t|&.*?;[0-9]*&.*?;|&.*?;", "", cleaned_html)
+
+print(cleaned_text)  # 输出："Thisisasampletext."
+```
+
+
+
+在上面的示例中，该代码将输入字符串 `cleaned_html` 中的特殊字符和空格替换为一个空字符串，最终返回一个只有文本内容的字符串 `cleaned_text`。
+
+3.）这段代码用于标准化 `cleaned_html` 中的文本，并移除其中的空格。具体来说，它包含两个步骤。
+
+1. `ucd.normalize('NFKC', cleaned_html)` 用于将文本进行 Unicode 规范化，使得其中的字符能够以一致的方式表示。其中 `NFKC` 表示一个 Unicode 规范化形式，在这个规范形式下，文本中的字符被转换为其兼容表现形式并组合可能的字符。
+2. `.replace(' ', '')` 用于删除文本中的所有空格（包括空格、制表符和换行符）。
+
+以下是一个示例：
+
+```
+import unicodedata as ucd
+
+cleaned_html = "This is\n a\t   test."
+normalized_text = ucd.normalize('NFKC', cleaned_html).replace(' ', '')
+
+print(normalized_text)  # 输出："Thisisa    test."
+```
+
+
+
+在上面的示例中，代码首先使用 `normalize()` 方法将文本进行 Unicode 规范化，然后使用 `replace()` 方法删除其中的空格。最终返回一个只包含字符和制表符的字符串 `normalized_text`。
+
+### starlette 
+
+
+
+### timeit
+
+`timeit` 是 Python 标准库中用于测量代码执行时间的模块。该模块提供了 `timeit()` 函数，可以在代码执行时测量时间，并输出每次运行代码所用的时间、总时间、平均时间和标准偏差等统计信息。
+
+通常，你可以使用 `timeit` 模块来测试程序中重复运行的瓶颈代码和算法在多个输入上的速度表现。以下是一个 `timeit` 模块的示例：
+
+```python
+import timeit
+
+def test_function():
+    # 这里是测试代码或函数
+    pass
+
+if __name__ == '__main__':
+    # 测试代码块执行1000次
+    result = timeit.timeit(test_function, number=1000)
+    print(f"总共用时：{result} 秒")
+```
+
+
+
+在这个例子中，我们先定义了一个 `test_function()` 函数，它是我们要测试的代码或函数。然后，在主程序中，我们使用 `timeit.timeit()` 函数来测试运行 `test_function()` 函数 1000 次的总时间。默认情况下，`timeit.timeit()` 函数运行代码一百万次。我们可以通过 `number` 参数设置要运行的次数。
+
+需要注意的是，`timeit.timeit()` 函数执行次数越多，产生的估计时间就越准确。然而，如果函数执行的时间很短，可能会出现估计时间偏差的情况，因为计时器的精度有限。在这种情况下，可以通过增加重复次数的数量来减少估计误差。
+
+此外，`timeit` 模块还提供了其他用于计时的函数，比如 `default_timer()` 用于测量时间和 `repeat()` 用于反复测量相同的代码块以获得更准确的结果。
+
+### time
+
+
+
+### threading
+
+Python中的multiprocessing和threading模块都可以用于实现多线程编程，但是它们之间有一些区别。
+
+multiprocessing模块是Python中的一个多进程处理模块，它提供了与threading模块类似的API，但是它使用多个进程而不是多个线程来执行任务。这使得multiprocessing模块可以更好地利用多核CPU，从而提高程序的性能。另外，由于每个进程都有自己独立的内存空间，因此在使用multiprocessing模块时不需要担心线程安全问题。
+
+相比之下，threading模块则是Python中的一个多线程处理模块。与multiprocessing模块不同，threading模块使用多个线程而不是多个进程来执行任务。由于线程共享同一进程的内存空间，因此在使用threading模块时需要注意线程安全问题。
+
+总的来说，如果你需要利用多核CPU来提高程序性能，并且不想担心线程安全问题，那么可以考虑使用multiprocessing模块。如果你只需要在单个CPU上执行任务，并且希望更轻量级地实现多线程编程，那么可以考虑使用threading模块。
+
+
 
 ### pymongo
 
@@ -343,6 +525,34 @@ print(res.inserted_ids)
 ```
 
 
+
+### logging
+
+在 Python 中，可以使用 logging 模块来输出日志信息。logging 模块可以将日志输出到控制台、文件等位置，并可以控制日志的输出级别，十分灵活。
+
+以下是输出日志到文件的示例代码：
+
+```python
+import logging
+
+# 配置日志信息
+logging.basicConfig(filename='1.log', level=logging.DEBUG, format='%(asctime)s %(levelname)s:%(message)s')
+
+# 输出日志信息
+logging.debug('This is a debug message')
+logging.info('This is a info message')
+logging.warning('This is a warning message')
+logging.error('This is an error message')
+logging.critical('This is a critical message')
+```
+
+在上述代码中，首先使用 logging.basicConfig() 方法来配置日志信息。这个方法定义了日志的输出位置、输出级别和格式。在这个例子中，我们将日志信息输出到文件 example.log 中，日志级别为 DEBUG，即输出所有级别的日志信息。输出格式采用了 asctime、levelname 和 message 三个变量，分别表示日志输出时间、日志级别和日志信息。
+
+接下来，使用 logging.debug()、logging.info()、logging.warning()、logging.error() 和 logging.critical() 方法来输出不同级别的日志信息。
+
+在运行这个程序后，日志信息会被输出到指定的文件 example.log 中。
+
+注意：如果指定的文件不存在，则会自动创建。如果文件已经存在，则新的日志信息会被追加到文件的末尾。同时，需要注意写入权限问题，如果没有权限写入指定的目录或文件，则会抛出 IOError 异常。
 
 
 
@@ -557,6 +767,8 @@ print(df)
 
 ### matplotlib
 
+show前savefig,不然是白色
+
 ```
 import matplotlib.pyplot as plt
 
@@ -641,6 +853,10 @@ with open(f'./douban/{url.split("/")[-1]}', 'wb') as f:
 > 这里检测的结果返回的是字典，而我们需要的是encoding的内容，即
 >
 > chardet.detect()['encoding']
+>
+> 
+>
+> r.encoding = chardet.detect(r.content)['encoding']
 
 
 
@@ -667,11 +883,153 @@ ctx = execjs.compile("""
 print(ctx.call("add", 1, 2))
 ```
 
+### heapq
+
+Python中的`heapq`是一个堆队列算法模块，提供一些基本的堆操作函数。堆是一种特殊的树形数据结构，它满足堆的特性：对于每个节点，父节点的键值总是小于或等于任何一个子节点的键值。这里的“小于等于”可以是任意一种可比较的关系，常见的有小于号、大于号等等。堆通常用来实现优先队列，能够很快地找到优先级最高的元素。
+
+heapq模块提供以下常用的函数：
+
+1. `heapq.heappush(heap, item)`：往堆heap中插入一个元素item，保证heap仍然是一个最小堆。
+2. `heapq.heappop(heap)`：从堆heap中弹出最小的元素，该元素在heap中被移除。
+3. `heapq.heappushpop(heap, item)`：推入元素item到heap中，并且返回堆中最小值。
+4. `heapq.heapreplace(heap, item)`：将堆中最小值替换成item，并返回堆中原来的最小值。堆大小不变。
+5. `heapq.nlargest(n, iterable, key=None)`：返回最大的n个元素，iterable表示可迭代对象，如列表，元组等；key表示排序的关键字，和sorted中的key类似。
+6. `heapq.nsmallest(n, iterable, key=None)`：返回最小的n个元素，用法同nlargest。
+7. `heapq.heapify(x)`：将列表x转换为堆。
+
+示例：
+
+```python
+import heapq
+
+# 1. 初始化一个堆列表
+heap = []
+
+# 2. 往堆中插入元素，维持堆的特性
+heapq.heappush(heap, 3)
+heapq.heappush(heap, 1)
+heapq.heappush(heap, 2)
+
+# 3. 弹出堆中最小的元素，3将被移除
+print(heapq.heappop(heap))  # 1
+
+# 4. 往堆中插入一个元素，并弹出堆中最小的元素
+print(heapq.heappushpop(heap, 4))  # 2
+
+# 5. 堆中元素替换，原堆中最小的元素是2，现在被替换成了5
+print(heapq.heapreplace(heap, 5))  # 2
+
+# 6. 返回堆中最大的n个元素
+print(heapq.nlargest(2, heap))  # [5, 4]
+
+# 7. 返回堆中最小的n个元素
+print(heapq.nsmallest(2, heap))  # [3, 4]
+```
+
+### pytextrank
+
+`pytextrank`是在Python中使用TextRank算法的一个包，用于从文本中提取关键词和摘要。TextRank是一种基于图的排序算法，用于在文本中发现重要的单词和短语。它在PageRank算法（一种用于在web页面上评估页面的重要性）的基础上进行开发，并在许多自然语言处理任务中得到了广泛应用。TextRank使用迭代方式计算单词的重要性，将单词表示为图中的节点，并将共现单词之间的边权值分配为单词之间的相似性。重要性得分被视为节点中心性分数。
+
+`pytextrank`包提供了以下功能：
+
+1. 关键词提取：从文本中提取关键词，其中关键词按其重要性得分排序。
+2. 摘要提取：从文本中提取摘要，其中摘要是文本中预定义字数的最重要文本段落。
+3. 短语提取：从文本中提取短语，其中短语是高度相关且频繁出现的单词组合。
+4. 总结和摘录：提供可读格式的可编程摘要。
+
+`pytextrank`的工作原理：
+
+1. 将文本划分为句子，每个句子都是一个节点。
+2. 计算句子之间的相似性，将其用权重表示为图中的边。
+3. 通过迭代计算排名函数以确定每个单词（节点）的重要性得分，其中排名函数基于PageRank算法。
+4. 基于单词（节点）的得分，提取关键字、短语和摘要。
+
+下面是一个使用`pytextrank`从文本中提取关键词的示例：
+
+```python
+import pytextrank
+import spacy
+
+nlp = spacy.load("en_core_web_sm")
+tr = pytextrank.TextRank()
+nlp.add_pipe(tr.PipelineComponent, name="textrank", last=True)
+
+text = "TextRank is a graph-based ranking model for text processing. It uses a modification of the PageRank algorithm to create a weighted graph of words or phrases extracted from a text document and calculate a score for each word or phrase based on its significance in the text."
+doc = nlp(text)
+
+# 输出关键词及其权重得分
+for phrase in doc._.textrank.summary(limit_phrases=15, limit_sentences=5):
+    print(phrase.text)
+```
+
+
+
+输出结果可能为：
+
+```
+TextRank algorithm
+graph-based ranking model
+weighted graph
+phrases extracted
+score
+PageRank algorithm
+text processing
+significant
+words
+modification
+document
+significance
+calculate
+model
+```
+
+
+
+以上是一个简单的使用`pytextrank`的示例，可以看到，`pytextrank`提取的关键词具有很好的语义连贯性和主题相关性，从文本中提取关键词和摘要成为自然语言处理中非常常见和重要的任务，`pytextrank`提供了一种简单而实用的方法。
+
+### warning
+
+`warnings`模块是Python中用于处理警告信息的一个标准库。在Python程序中，当某些代码存在潜在问题或者错误时，会生成警告信息，这些警告信息通常不会停止程序的执行，但是可以提示开发者注意一些问题。`warnings`模块提供了一些功能，可以控制和处理警告信息。
+
+主要的函数有:
+
+1. `warnings.warn(msg, WarningType=UserWarning, stacklevel=1)`：向警告日志中添加一条警告信息，参数`msg`表示警告信息字符串，`WarningType`为警告类型，默认为`UserWarning`，`stacklevel`表示警告信息的打印级别，默认为`1`。
+2. `warnings.filterwarnings(action, category=Warning, message='', module='', lineno=0, append=False)`：用于控制警告信息的输出，可以过滤或者忽略某些警告信息。`action`可以为以下几种之一：
+   - `error`：将警告信息转为异常，警告信息将被抛出并终止程序的执行。
+   - `ignore`：忽略指定类型的警告信息，不会对程序执行造成任何影响。
+   - `always`：无条件输出所有警告信息，即使已经有相同的警告信息输出过。
+   - `default`：打印第一次出现的指定类型的警告信息，而不管重复出现多少次。
+   - `module`：与`message`配合使用，可以控制只输出指定模块或文件中特定警告信息。
+3. `warnings.showwarning(message, category, filename, lineno, file=None, line=None)`：定义了警告信息的默认输出格式。
+
+示例：
+
+```python
+import warnings
+
+# 取消打印DeprecationWarning警告信息
+warnings.filterwarnings("ignore",category=DeprecationWarning)
+
+def foo():
+    # 提示函数将在未来版本中被删除
+    warnings.warn("Function 'foo' is deprecated.", DeprecationWarning)
+
+foo()
+```
+
+
+
+在上面的示例中，我们用过 `filterwarnings()` 函数取消了打印`DeprecationWarning`的警告信息，因此程序不会打印任何警告信息。结果是程序退出时返回值为`None`。如果把 `filterwarnings()` 函数的参数改为 `warnings.filterwarnings('error')`，程序将抛出一个`DeprecationWarning`的异常，终止程序的执行。
+
+需要注意的是，警告信息常常意味着代码的不完善性和潜在的问题，建议确保代码的完整性并尽量减少警告信息的产生。如果警告信息不会影响程序的执行，可以使用`filterwarnings()`函数进行忽略或过滤。
+
+
+
 
 
 ### selenium
 
-快速开始
+#### 快速开始
 
 ```python
 import requests
@@ -765,6 +1123,68 @@ from selenium.webdriver import DesiredCapabilities
 #在driver中加入desired_capabilities参数
 # web = webdriver.Chrome(options=chrome_options,desired_capabilities=capabilities)
 ```
+
+#### 禁用加载
+
+在 Selenium 中，可以通过设置 ChromeOptions 参数来禁止加载字体文件。
+
+以下是一个示例：
+
+```python
+options.add_argument("--disable-remote-fonts")
+```
+
+```python
+from selenium import webdriver
+
+options = webdriver.ChromeOptions()
+options.add_argument("--disable-extensions")
+options.add_argument("--disable-gpu")
+options.add_argument("--disable-infobars")
+options.add_argument('--disable-dev-shm-usage')
+options.add_argument('--no-sandbox')
+options.add_argument("--headless")
+options.add_argument("--disable-default-apps")
+options.add_argument("--disable-features=site-per-process")
+options.add_argument("--disable-popup-blocking")
+options.add_argument("--disable-translate")
+#禁用浏览器的同源策略
+options.add_argument("--disable-web-security")
+#指定 Chrome 在本地开启一个远程调试端口
+options.add_argument("--remote-debugging-port=9222")
+options.add_experimental_option("prefs", {"profile.managed_default_content_settings.images": 2,
+                                          "profile.managed_default_content_settings.stylesheet": 2,
+                                          "profile.managed_default_content_settings.cookies": 2,
+                                          "profile.managed_default_content_settings.javascript": 1,
+                                          "profile.managed_default_content_settings.plugins": 2,
+                                          "profile.managed_default_content_settings.popups": 2,
+                                          "profile.managed_default_content_settings.geolocation": 2,
+                                          "profile.managed_default_content_settings.notifications": 2,
+                                          "download.default_directory": "~/Downloads",
+                                          "download.prompt_for_download": False,
+                                          "download.directory_upgrade": True,
+                                          "safebrowsing.enabled": False})
+prefs = {"download.default_directory": "~/Downloads",
+         "download.prompt_for_download": False,
+         "download.directory_upgrade": True,
+         "safebrowsing.enabled": False}
+options.add_experimental_option("prefs", prefs)
+
+# 禁止加载字体文件
+options.add_experimental_option("prefs", {"profile.default_content_settings": {"fonts": {"enabled": False}}})
+
+driver = webdriver.Chrome(chrome_options=options)
+```
+
+
+
+在这个示例中，我们首先创建了一个 `ChromeOptions` 对象，并设置了一些 Chrome 浏览器选项。然后，我们使用 `add_experimental_option` 方法添加了一个名为 `prefs` 的字典，其中包含了禁止加载字体文件的配置信息。
+
+最后，我们创建了一个 Chrome WebDriver 对象，并将 `ChromeOptions` 对象传递给它作为参数，启动 Chrome 浏览器。
+
+在请求网页时，Chrome 浏览器将不会加载字体文件，可以提高页面加载速度。
+
+
 
 
 
@@ -1094,11 +1514,55 @@ if __name__ == '__main__':
 
 
 
+### unicodedata
 
+unicode编码标准化
+
+```python
+import unicodedata as ucd
+
+# import unicodedata
+
+# 将 Unicode 字符串转换为 NFC 标准形式
+# s = ucd.normalize('NFC', ' \xa0')
+# print(s)
+
+a=' \xa0'
+a= ucd.normalize('NFKC', a)
+
+print(a.replace(' ', ''))
+```
 
 ### WorldCould
 
-```
+```python
+# 1.读取文本内容，并用jieba库中的cut()函数进行分词
+import jieba
+report = open('信托行业报告.txt','r').read()
+words = jieba.cut(report)
+
+# 2.通过for循环语句提取列表words中长度大于等于4个字的词
+report_words = []
+for word in words: #将长度大于等于4个字的词放入列表
+    if len(word) >= 4:
+        report_words.append(word)
+#print(report_words)
+
+# 3.获得打印输出高频词的出现次数
+from collections import Counter
+result = Counter(report_words).most_common(50) #取最多的50组
+#print(result)
+
+# 4.绘制词云图
+from wordcloud import WordCloud #导入相关库
+content = ' '.join(report_words) #把列表转换为字符串
+wc = WordCloud(font_path='simhei.ttf',#字体文件路径（这里为黑体）
+               background_color='white',#背景颜色（这里为白色）
+                width=1000,#宽度
+                height=600,#高度
+                 ).generate(content) #绘制词云图
+wc.to_file('词云图.png') #导出成PNG格式图片（使用相对路径）
+
 ```
 
 
