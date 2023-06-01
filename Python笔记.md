@@ -600,7 +600,11 @@ df.head()
 
 
 
+#### 删除满足条件的行
 
+```python
+df = df.drop(df[(df.age < 25) | (df.age >= 30)].index)
+```
 
 
 
@@ -613,6 +617,7 @@ del df['column-name']
 #采用drop方法，有下面三种等价的表达式：
 df,drop('num',axix=1),不改变内存，及输入df的时候，它还是显示原数据
 df.drop('num',axix=1，inplace=True),改变内存，及输入df的时候，它显示改变后的数据
+df_处理.drop(['热度值','热度单位','类别1','类别2'],axis=1,inplace=True)
 df.drop([df.columns[[0,1]]],axis=1,inpalce=True)
 ```
 
@@ -673,6 +678,16 @@ df.index = range(len(df))  # 重置索引
 | **drop**    | **布尔值，如果为False，则将替换的索引列添加到数据中。**   |
 | ----------- | --------------------------------------------------------- |
 | **inplace** | **布尔值，如果为True，则对原始 DataFrame 本身进行更改。** |
+
+#### 提取数字并过滤
+
+```python
+df_清洗 = df_清洗.drop(df_清洗[df_清洗['字数'].str.replace('万字','').astype(float) < 500].index)
+```
+
+
+
+
 
 #### 将df的列顺序改变
 

@@ -27,6 +27,8 @@
 
 [Python笔记](./Python笔记.md)
 
+[conda手册](./conda手册.md)
+
 [Selenium](./Selenium.md)
 
 [Python操作Redis](./Python操作Redis.md)
