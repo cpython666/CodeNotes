@@ -1,5 +1,13 @@
 # Python笔记
 
+## 编码声明
+
+```python
+# -*- coding: utf-8 -*-
+```
+
+
+
 > 下载python库一直失败，报hostname出错的问题
 >
 > 可能是因为你电脑开了代理
@@ -304,6 +312,45 @@ pipreqs ./ --encoding=utf8 --force
 > `--force` ：强制执行，当 生成目录下的requirements.txt存在时覆盖 
 >
 > **.** /: 在哪个文件生成requirements.txt 文件
+
+### fastapi
+
+创建基本程序
+
+```python
+from Spider.logs import *
+from Spider.config import *
+from pydantic import BaseModel
+from fastapi import FastAPI
+import uvicorn
+
+app = FastAPI(title="全网爬虫",
+              description="这是一个网页爬虫的项目",
+              docs_url="/docs",
+              openapi_url="/openapi")
+
+class Item(BaseModel):
+    auth: str
+    query: str
+# @app.get('/')
+
+@app.post('/search')
+def search_(item:Item):
+    if item.auth=='':
+        return 1
+    else:
+        return 2
+
+if __name__ == "__main__":
+    uvicorn.run("__init__:app", host="0.0.0.0", port=5000)
+```
+
+挂载静态资源
+
+```python
+app.mount("/templates", StaticFiles(directory=os.path.join(os.path.dirname(__file__),'templates')), name="templates")
+app.mount("/static", StaticFiles(directory=os.path.join(os.path.dirname(__file__),'static')), name="static")
+```
 
 
 
@@ -848,6 +895,20 @@ with open(f'./douban/{url.split("/")[-1]}', 'wb') as f:
 > - 注意字典proxy中，对于每个value无论key是HTTP还是HTTPS，都用HTTP开头！只有key用HTTPS！
 > - 如果requests想要爬取的网站是https:// ，那么一定一定需要在requests里加上verify = False这句话
 
+
+对于`requests`库返回的响应对象 `r`，以下是相关属性和方法的解释：
+
+1. `r.content`: 这是响应内容的原始字节码。它表示网页的原始数据，以字节形式存储。
+2. `r.encoding`: 这是根据响应头部和内容自动推测的网页编码。`requests`库会尝试根据`Content-Type`头部中的编码信息来确定编码。你可以通过访问 `r.encoding` 来获取当前编码。
+3. `r.text`: 这是使用 `r.content` 和 `r.encoding` 进行解码后的字符串。通过访问 `r.text`，你可以获取到解码后的文本内容，即以字符串形式表示的网页内容。
+4. `decode()`: 这是用于将字节码解码为字符串的方法。当你有字节码数据时，可以使用 `decode()` 方法来指定相应的编码进行解码。例如，`r.content.decode('utf-8')` 将以 UTF-8 编码将字节码解码为字符串。
+
+请注意，`r.content` 返回的是字节码，而 `r.text` 返回的是已解码的字符串。当你使用 `r.text` 时，`requests`库会自动根据 `r.encoding` 属性进行解码操作，以提供方便的文本访问接口。如果你使用 `r.content`，则需要手动进行解码。
+
+另外，需要注意的是，`r.encoding` 并不总是准确的。有些网页可能未正确指定编码，或者 `requests` 库的自动检测可能会失败。在这些情况下，你可能需要根据实际情况自行推测编码或使用其他库（如 `chardet`）进行编码检测。
+
+
+
 ### chardet
 
 练习爬虫的许多小伙伴，在爬取网页时，肯定遇到过页面乱码的情况，其实是网页编码没有成功配对。
@@ -873,7 +934,15 @@ with open(f'./douban/{url.split("/")[-1]}', 'wb') as f:
 >
 > r.encoding = chardet.detect(r.content)['encoding']
 
-
+```python
+def get_page(url):
+    r=requests.get(url,headers=get_headers(),timeout=TIMEOUT)
+    if r.status_code == 200:
+        r = r.content.decode(chardet.detect(r.content)["encoding"])
+        return r
+    else:
+        raise Exception(f"请求失败{r.text}")
+```
 
 
 
@@ -1043,6 +1112,16 @@ foo()
 
 
 ### selenium
+
+```python
+script = '''object.defineProperty(navigator,'webdriver',{undefinedget: () => undefined})'''
+#execute_cdp_cmd用来执行chrome开发这个工具命令
+driver.execute_cdp_cmd("page.addscriptToEvaluateonNewDocument",{"source": script})
+```
+
+```javascript
+window.navigator.webdriver
+```
 
 #### 快速开始
 
@@ -1675,6 +1754,87 @@ pyinstaller -c -F x.py -i favo.ico
 -i 表示可执行文件的图标
 ```
 
+### urllib
+
+`urllib`是Python标准库中的一个模块，包含了许多处理URL的方法，它提供了以下功能：
+
+1. 发送 HTTP/HTTPS 请求：`urllib.request.urlopen()`
+
+   `urlopen()`是`urllib.request`模块中的一个方法，用于发送HTTP/HTTPS请求并获取响应内容。它支持GET、POST、PUT等HTTP方法，并可以通过设置请求头、请求体等参数来定制请求。
+
+   ```python
+   import urllib.request
+   
+   url = 'https://www.example.com'
+   response = urllib.request.urlopen(url);
+   
+   print(response.status)
+   print(response.getheader('Content-Type'))
+   print(response.read())
+   ```
+
+   
+
+2. 解析 URL：`urllib.parse.urlparse()`
+
+   `urlparse()`可以将一个URL解析成6个部分：协议、主机名、端口、路径、查询参数和片段，并返回一个包含这些部分的`ParseResult`对象。
+
+   ```python
+   from urllib.parse import urlparse
+   
+   url = 'https://example.com:8080/path/to/page?param=value#fragment'
+   result = urlparse(url)
+   
+   print(result.scheme)
+   print(result.netloc)
+   print(result.path)
+   print(result.query)
+   print(result.fragment)
+   ```
+
+   
+
+3. 编码 URL 参数：`urllib.parse.urlencode()`
+
+   `urlencode()`可以将一个字典类型的数据编码成URL参数格式，并返回一个字符串。它通常用于构建GET请求中的查询参数。
+
+   ```python
+   from urllib.parse import urlencode
+   
+   query_params = {
+       'page': 1,
+       'size': 10,
+       'q': 'keyword'
+   }
+   encoded_params = urlencode(query_params)
+   
+   print(encoded_params)
+   ```
+
+   
+
+4. 编码和解码 URL 路径：`urllib.parse.quote()`和`urllib.parse.unquote()`
+
+   `quote()`和`unquote()`可以分别将字符串编码成URL路径安全的格式和解码已编码的URL路径。
+
+   ```python
+   from urllib.parse import quote, unquote
+   
+   path = '/path/to/page with spaces'
+   encoded_path = quote(path)
+   
+   print(encoded_path)
+   
+   decoded_path = unquote(encoded_path)
+   print(decoded_path)
+   ```
+
+   
+
+总之，`urllib`提供了许多有用的方法来处理URL和发送HTTP/HTTPS请求。这些方法在Web开发中非常有用。（请注意：自Python 3版本起，`urllib`分为了4个子模块，分别是`urllib.request`、`urllib.parse`、`urllib.error`和`urllib.robotparser`。）
+
+
+
 
 
 ## 写文件
@@ -2000,3 +2160,16 @@ https://api.bilibili.com/x/web-interface/view?aid=46101743
 
 
 
+## 一些函数
+
+```python
+def filter_urls(answers_list,black_list=None):
+    if black_list is None:
+        # 黑名单放置被墙的网站,避免超时请求
+        black_list = ["google.com","zh.wikipedia.org"]
+        filtered_urls=[]
+        for answer in answers_list:
+            if all(domain not in answer['url'] for domain in black_list) and answer['url'].split(".")[-1] != "pdf":
+                filtered_urls.append(answer)
+                return filtered_urls
+```

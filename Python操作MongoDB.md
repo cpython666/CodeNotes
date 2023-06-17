@@ -589,5 +589,126 @@ user = User(username='Alic11111zaea', password='password123')
 user.save()
 ```
 
+## mongoengine查找url以jpg结尾的数据
 
+要使用MongoEngine查找数据库中URL以jpg结尾的数据，可以使用正则表达式来匹配URL，并使用MongoEngine的`icontains`运算符进行不区分大小写的模糊查询。
+
+以下是一个使用MongoEngine查找数据库中URL以jpg结尾的数据的示例：
+
+```python
+from mongoengine import *
+
+connect("mydatabase")
+
+class Image(Document):
+    url = StringField(required=True)
+
+images = Image.objects(url__iregex=r"\.jpg$")  # 使用正则表达式查找以jpg结尾的URL
+for image in images:
+    print(image.url)
+```
+
+
+
+在这个例子中，我们定义了一个名为`Image`的模型类，其中包含一个名为`url`的字符串属性。我们使用`__iregex`运算符对`url`属性进行不区分大小写的正则表达式匹配，以查找URL以`.jpg`结尾的文档。最后，我们在for循环中打印出找到的每个文档的`url`属性。
+
+请注意，正则表达式的`$`字符匹配字符串的结尾部分。
+
+另外，MongoEngine还提供了`__iendswith`运算符，这个运算符用于快速匹配字符串的结尾部分。在这个例子中，使用`__iendswith`运算符可以直接查找URL以`.jpg`结尾的文档，如下所示：
+
+```python
+images = Image.objects(url__iendswith=".jpg")
+```
+
+
+
+希望这个解释能够帮助你使用MongoEngine查找数据库中URL以jpg结尾的数据。
+
+## 输出一个mongoengine对象的字符串形式
+
+```python
+person = Person(name="John Smith", age=30)
+person.save()
+
+print(person.to_json())
+```
+
+## 添加索引
+
+在使用MongoEngine连接MongoDB时，你可以通过在模型定义中设置索引来优化查询性能。MongoEngine提供了`index`参数，用于指定要为哪些字段创建索引。
+
+以下是一些示例，展示如何在MongoEngine模型中设置索引：
+
+```python
+pythonCopy codefrom mongoengine import connect, Document, StringField, IntField
+
+# 连接MongoDB数据库
+connect('your_database_name')
+
+# 定义模型
+class MyModel(Document):
+    field1 = StringField(required=True)
+    field2 = IntField()
+    field3 = StringField()
+
+    # 设置索引
+    meta = {
+        'indexes': [
+            'field1',  # 单字段索引
+            ('field2', 'field3'),  # 复合索引
+        ]
+    }
+```
+
+在上述示例中，我们定义了一个名为`MyModel`的模型，其中包含了几个字段`field1`、`field2`和`field3`。通过在模型的`meta`属性中设置`indexes`，我们可以指定要创建的索引。
+
+- `field1`字段上的索引是一个简单的单字段索引。在查询中涉及到`field1`字段时，这个索引可以提高查询性能。
+- `('field2', 'field3')`字段上的索引是一个复合索引，包含了两个字段。复合索引可以提高涉及到这两个字段的查询性能。
+
+设置索引后，MongoEngine会在数据库中创建对应的索引，以优化查询性能。索引可以加速查询，并提高数据的读取效率。
+
+请注意，索引的使用应根据具体的查询模式和数据访问模式进行优化。在设置索引时，需要考虑到查询的频率、字段的选择性、查询条件的复杂度等因素。
+
+通过合理地设置索引，可以大大提高查询性能。在设计数据模型时，根据实际的查询需求和数据访问模式，选择合适的字段来创建索引，以获得更好的性能。
+
+## 根据timestamp字段查询近几日数据量
+
+```python
+def get_daily_count(x):
+    current_date = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    # 构建聚合查询 pipeline
+    pipeline = [
+        {"$match": {
+            "timestamp": {
+                "$gte": current_date - timedelta(days=x-1),
+                "$lt": current_date + timedelta(days=1)
+            }
+        }},
+        {"$group": {
+            "_id": {
+                "year": {"$year": "$timestamp"},
+                "month": {"$month": "$timestamp"},
+                "day": {"$dayOfMonth": "$timestamp"}
+            },
+            "count": {"$sum": 1}
+        }},
+        {"$project": {
+            "_id": 0,
+            "year": "$_id.year",
+            "month": "$_id.month",
+            "day": "$_id.day",
+            "count": 1
+        }},
+        {"$sort": {"year": 1, "month": 1, "day": 1}}
+    ]
+    result = list(Page.objects.aggregate(*pipeline))
+    date_range = [(current_date - timedelta(days=i)).date() for i in range(x-1, -1, -1)]
+    date_dict = {date: 0 for date in date_range}
+
+    for entry in result:
+        date = datetime(entry["year"], entry["month"], entry["day"]).date()
+        count = entry["count"]
+        date_dict[date] = count
+    return [(str(date),cnt) for date,cnt in date_dict.items()]
+```
 

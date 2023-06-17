@@ -23,13 +23,33 @@
 
 [Canvas百战成神-圆](Canvas百战成神-圆.md)
 
+[绘制精彩图表：探索ECharts可视化库](绘制精彩图表：探索ECharts可视化库.md)
+
 ## Python
 
-[Python笔记](./Python笔记.md)
+### 虚拟环境管理
 
 [conda手册](./conda手册.md)
 
+[Python Virtualenv：隔离和管理Python项目的利器](Python Virtualenv：隔离和管理Python项目的利器.m)
+
+### 基础进阶
+
+[Python笔记](./Python笔记.md)
+
+[解析万象：掌握Python中的解包技艺](解析万象：掌握Python中的解包技艺.md)
+
+[threading多线程](./threading多线程.md)
+
+[multiprocessing多进程](./multiprocessing多进程.md)
+
+### 爬虫
+
 [Selenium](./Selenium.md)
+
+[bs4](./bs4)
+
+### 数据库
 
 [Python操作Redis](./Python操作Redis.md)
 
@@ -37,15 +57,13 @@
 
 [Python操作MongoDB](./Python操作MongoDB.md)
 
-[threading多进程](./threading多进程.md)
-
-[multiprocessing多进程](./multiprocessing多进程.md)
-
 ## Java
 
 [Java笔记](Java笔记.md)
 
+## Linux
 
+[linux常用命令](./linux常用命令.md)
 
 ## C++编程大师之路：从入门到精通
 

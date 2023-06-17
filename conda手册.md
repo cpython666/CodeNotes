@@ -27,8 +27,6 @@ source ~/.bashrc
 conda init bash
 ```
 
-
-
 4. 验证是否安装成功
 
 ```python
