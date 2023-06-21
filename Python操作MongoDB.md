@@ -712,3 +712,54 @@ def get_daily_count(x):
     return [(str(date),cnt) for date,cnt in date_dict.items()]
 ```
 
+## 切换集合，获取数据等
+
+```python
+#获取要操作的集合名
+collection_name=get_collection_name(url,type=type)
+print(collection_name)
+#切换集合
+collection=Link().switch_collection(collection_name)
+print(collection)
+#huo'qu'ji
+docs=collection._get_collection().find({})
+for document in docs:
+    # 处理每个文档
+    print(document)
+```
+
+```python
+# try:
+#     Link(url=url, visited=visited).save()
+#     print(f'{url}请求成功，保存完毕')
+# except:
+#     Link.objects(url=url).update(visited=visited)
+#     print(f'{url}请求成功，更新完毕')
+```
+
+```python
+db=Test()._get_db()
+cols=db.list_collection_names()
+```
+
+对于MongoEngine库而言，直接使用`_get_db()`和`_get_collection()`方法获取的集合和通过`Test().switch_collections()`方法获取的集合对象是不同的。
+
+`_get_db()`和`_get_collection()`方法是MongoEngine库中的内部方法，用于获取数据库和集合对象。这两个方法返回的是MongoDB原生驱动（如PyMongo）中的对象，而不是MongoEngine库中提供的`Document`类的实例。
+
+而`Test()`对象和`switch_collections()`方法是在自定义的类中实现的。根据`Test()`类和其中的`switch_collections()`方法的具体实现，`switch_collections()`方法可能是通过MongoEngine库的API，通过其他方法获取集合对象。
+
+因此，直接使用`_get_db()`和`_get_collection()`方法获取的集合与通过`Test().switch_collections()`方法获取的集合对象很可能是不同的。要确定两者是否相同，需要查看`Test()`类和其中的`switch_collections()`方法的具体实现。
+
+获取数据库获取集合再插入数据：
+
+```python
+db=Test()._get_db()['test']
+a=db.insert_one({'url':111})
+```
+
+对象换集合：
+
+```python
+db=Test().switch_collection('111')._get_collection()
+a=db.insert_one({'url':111})
+```

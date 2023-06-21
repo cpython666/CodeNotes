@@ -57,6 +57,9 @@
 
 [Python操作MongoDB](./Python操作MongoDB.md)
 
+## Go
+[Go学习路线及资源汇总](./Go/Go学习路线及资源汇总.md)
+
 ## Java
 
 [Java笔记](Java笔记.md)
