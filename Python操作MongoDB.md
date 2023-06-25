@@ -763,3 +763,18 @@ a=db.insert_one({'url':111})
 db=Test().switch_collection('111')._get_collection()
 a=db.insert_one({'url':111})
 ```
+
+## 遍历集合所有数据
+
+```python
+collection = db['mycollection']
+
+# 查询_idzui'xiao一条数据
+data = collection.find_one({}, sort=[("_id", pymongo.ASCENDING)])
+while data:
+    # 处理数据
+    print(data)
+
+    # 查询下一条数据
+    data = collection.find_one({"_id": {"\$gt": data["_id"]}})
+```
