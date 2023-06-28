@@ -1123,6 +1123,25 @@ driver.execute_cdp_cmd("page.addscriptToEvaluateonNewDocument",{"source": script
 window.navigator.webdriver
 ```
 
+#### 完全隐藏
+
+```python
+from selenium import webdriver
+import os
+current_path = os.path.dirname(os.path.abspath(__file__))
+driver = webdriver.Chrome(                 executable_path=os.path.join(current_path,'chromedriver.exe'))
+
+with open(os.path.join(self.current_path,'stealth.min.js')) as f:
+    js = f.read()
+
+    driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+        "source": js
+    })
+    driver.get(url)
+```
+
+
+
 #### 快速开始
 
 ```python
