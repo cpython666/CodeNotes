@@ -31,7 +31,7 @@
 
 [conda手册](./conda手册.md)
 
-[Python Virtualenv：隔离和管理Python项目的利器](Python Virtualenv：隔离和管理Python项目的利器.md)
+[Python Virtualenv：隔离和管理Python项目的利器](./Python Virtualenv：隔离和管理Python项目的利器.md)
 
 [pyautogui 学习笔记-掌握自动化操作工具-介绍Python库PyAutoGUI](./Python/pyautogui 学习笔记-掌握自动化操作工具-介绍Python库PyAutoGUI.pdf)
 
