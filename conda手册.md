@@ -86,8 +86,6 @@ conda create -n python27 python=2.7
 conda create -n web python=3.8
 ```
 
-
-
 ### 激活（切换）环境
 
 ```
