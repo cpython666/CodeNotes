@@ -11,17 +11,17 @@
 
 ## 前端
 
-[2022前端面试题](./2022前端面试题.md)
+[2022前端面试题](./前端/2022前端面试题.md)
 
 [Vue3+Vite创建步骤](Vue3+Vite构建步骤.md)
 
-[前端零散笔记](前端零散笔记.md)
+[前端零散笔记](./前端/前端零散笔记.md)
 
 [jquery笔记](jquery笔记.md)
 
-[Canvas](./Canvas.md)
+[Canvas](./前端/Canvas.md)
 
-[Canvas百战成神-圆](Canvas百战成神-圆.md)
+[Canvas百战成神-圆](./前端/Canvas百战成神-圆.md)
 
 [绘制精彩图表：探索ECharts可视化库](绘制精彩图表：探索ECharts可视化库.md)
 
@@ -29,35 +29,37 @@
 
 ### 虚拟环境管理
 
-[conda手册](./conda手册.md)
+[conda手册](./Python/conda手册.md)
 
-[PythonVirtualenv：隔离和管理Python项目的利器](./PythonVirtualenv：隔离和管理Python项目的利器.md)
+[PythonVirtualenv：隔离和管理Python项目的利器](./Python/PythonVirtualenv：隔离和管理Python项目的利器.md)
 
 [pyautogui学习笔记-掌握自动化操作工具-介绍Python库PyAutoGUI](./Python/pyautogui学习笔记-掌握自动化操作工具-介绍Python库PyAutoGUI.pdf)
 
 ### 基础进阶
 
-[Python笔记](./Python笔记.md)
+[Python笔记](./Python/Python笔记.md)
 
-[解析万象：掌握Python中的解包技艺](解析万象：掌握Python中的解包技艺.md)
+[解析万象：掌握Python中的解包技艺](./Python/解析万象：掌握Python中的解包技艺.md)
 
-[threading多线程](./threading多线程.md)
+[threading多线程](./Python/threading多线程.md)
 
-[multiprocessing多进程](./multiprocessing多进程.md)
+[multiprocessing多进程](./Python/multiprocessing多进程.md)
 
 ### 爬虫
 
-[Selenium](./Selenium.md)
+[Selenium](./爬虫/Selenium.md)
 
-[bs4](./bs4)
+[bs4](./爬虫/bs4)
+
+[深谙封装之道：requests再封装，更完美的请求函数.md](./爬虫/深谙封装之道：requests再封装，更完美的请求函数.md)
 
 ### 数据库
 
-[Python操作Redis](./Python操作Redis.md)
+[Python操作Redis](./Python/Python操作Redis.md)
 
-[简单易用，灵活强大：用SQLAlchemy实现Python操作数据库](./简单易用，灵活强大：用SQLAlchemy实现Python操作数据库.md)
+[简单易用，灵活强大：用SQLAlchemy实现Python操作数据库](./Python/简单易用，灵活强大：用SQLAlchemy实现Python操作数据库.md)
 
-[Python操作MongoDB](./Python操作MongoDB.md)
+[Python操作MongoDB](./Python/Python操作MongoDB.md)
 
 ## Go
 [Go学习路线及资源汇总](./Go/Go学习路线及资源汇总.md)
