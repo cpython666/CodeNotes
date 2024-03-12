@@ -555,8 +555,6 @@ jQuery事件对象其实就是js事件对象的一个封装，处理了兼容性
 ```javascript
     end(); // 筛选选择器会改变jQuery对象的DOM对象，想要回复到上一次的状态，并且返回匹配元素之前的状态。
 ```
-【案例：五角星评分案例.html】
-
 ### each方法
 
 > jQuery的隐式迭代会对所有的DOM对象设置相同的值，但是如果我们需要给每一个对象设置不同的值的时候，就需要自己进行迭代了。
@@ -614,8 +612,6 @@ jQueryUI专指由jQuery官方维护的UI方向的插件。
     //3.	引入jQueryUI的js文件
     //4.	使用jQueryUI功能
 ```
-使用jquery.ui.js手风琴菜单
-
 ## 制作jquery插件
 
 > 原理：jquery插件其实说白了就是给jquery对象增加一个新的方法，让jquery对象拥有某一个功能。
@@ -663,16 +659,18 @@ JSON.parse()
 
 ## 获取当前地址信息
 
-> <script src="./jquery.min.js"></script>
->     <script>
->     $.get("http://ipinfo.io", function(response) {
->         console.log(response.ip);
->         console.log(response.country);
->         console.log(response.region);
->         console.log(response.city);
->         $('.ip').text(response.country+'-'+response.region+'-'+response.city+'-'+response.ip)
-> }, "jsonp");
-> </script>
+```js
+<script src="./jquery.min.js"></script>
+ <script>
+ $.get("http://ipinfo.io", function(response) {
+     console.log(response.ip);
+     console.log(response.country);
+     console.log(response.region);
+     console.log(response.city);
+     $('.ip').text(response.country+'-'+response.region+'-'+response.city+'-'+response.ip)
+}, "jsonp");
+</script>
+```
 
 
 
